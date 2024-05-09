@@ -563,30 +563,30 @@ void APU::stepFrame()
             samplesToWrite = (frequency / Configuration::getFrameRate()) - 3 * (frequency / (Configuration::getFrameRate() * 4));
         }
         
-        SDL_LockAudio();
+        // SDL_LockAudio();
 
         // Step the timer ~3729 times per quarter frame for most channels
         //
-        int j = 0;
-        for (int stepIndex = 0; stepIndex < 3729; stepIndex++)
-        {
-            if (j < samplesToWrite &&
-                (stepIndex / 3729.0) > (j / (double)samplesToWrite))
-            {
-                uint8_t sample = getOutput();
-                audioBuffer[audioBufferLength + j] = sample;
-                j++;
-            }
+        // int j = 0;
+        // for (int stepIndex = 0; stepIndex < 3729; stepIndex++)
+        // {
+        //     if (j < samplesToWrite &&
+        //         (stepIndex / 3729.0) > (j / (double)samplesToWrite))
+        //     {
+        //         uint8_t sample = getOutput();
+        //         audioBuffer[audioBufferLength + j] = sample;
+        //         j++;
+        //     }
 
-            pulse1->stepTimer();
-            pulse2->stepTimer();
-            noise->stepTimer();
-            triangle->stepTimer();
-            triangle->stepTimer();
-        }
-        audioBufferLength += samplesToWrite;
+        //     pulse1->stepTimer();
+        //     pulse2->stepTimer();
+        //     noise->stepTimer();
+        //     triangle->stepTimer();
+        //     triangle->stepTimer();
+        // }
+        // audioBufferLength += samplesToWrite;
         
-        SDL_UnlockAudio();
+        //SDL_UnlockAudio();
     }
 }
 

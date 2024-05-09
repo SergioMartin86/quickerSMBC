@@ -4,7 +4,7 @@
 #include <jaffarCommon/logger.hpp>
 #include <jaffarCommon/json.hpp>
 #include "argparse/argparse.hpp"
-#include "stellaInstance.hpp"
+#include "SMBCInstance.hpp"
 #include "playbackInstance.hpp"
 
 int main(int argc, char *argv[])
@@ -72,12 +72,6 @@ int main(int argc, char *argv[])
   std::string stateDisabledBlocksOutput;
   for (const auto& entry : stateDisabledBlocks) stateDisabledBlocksOutput += entry + std::string(" ");
   
-  // Getting Controller 1 type
-  const auto controller1Type = jaffarCommon::json::getString(configJs, "Controller 1 Type");
-
-  // Getting Controller 2 type
-  const auto controller2Type = jaffarCommon::json::getString(configJs, "Controller 2 Type");
-
   // Getting reproduce flag
   bool isReproduce = program.get<bool>("--reproduce");
 
@@ -105,7 +99,7 @@ int main(int argc, char *argv[])
   jaffarCommon::logger::refreshTerminal();
 
   // Creating emulator instance  
-  auto e = stella::EmuInstance();
+  auto e = smbc::EmuInstance();
 
   // Initializing emulator instance
   e.initialize();
@@ -116,10 +110,6 @@ int main(int argc, char *argv[])
   // Initializing video output
   if (disableRender == false) e.initializeVideoOutput();
 
-  // Setting controller types
-  e.setController1Type(controller1Type);
-  e.setController2Type(controller2Type);
-  
   // Loading ROM File
   std::string romFileData;
   if (jaffarCommon::file::loadStringFromFile(romFileData, romFilePath) == false) JAFFAR_THROW_LOGIC("Could not rom file: %s\n", romFilePath.c_str());
@@ -183,16 +173,6 @@ int main(int argc, char *argv[])
       jaffarCommon::logger::log("[] Current Step #: %lu / %lu\n", currentStep + 1, sequenceLength);
       jaffarCommon::logger::log("[] Input:          %s\n", input.c_str());
       jaffarCommon::logger::log("[] State Hash:     0x%lX%lX\n", hash.first, hash.second);
-      jaffarCommon::logger::log("[] Memory Contents:\n");
-      for (int i = 0; i < 8; i++)
-      {
-       for (int j = 0; j < 16; j++)
-       {
-        jaffarCommon::logger::log("%02X ", e.getWorkRamPointer()[i*16 + j]);
-       }
-       jaffarCommon::logger::log("\n");
-      }
-      
 
       // Only print commands if not in reproduce mode
       if (isReproduce == false) jaffarCommon::logger::log("[] Commands: n: -1 m: +1 | h: -10 | j: +10 | y: -100 | u: +100 | k: -1000 | i: +1000 | s: quicksave | p: play | q: quit\n");

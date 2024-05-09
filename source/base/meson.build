@@ -10,7 +10,7 @@ baseSMBCSrc =  [
  'core/source/SMB/SMBEngine.cpp',
  'core/source/SMB/SMB.cpp',
  'core/source/SMB/SMBData.cpp',
- 'Main.cpp',
+ 'core/source/Main.cpp',
 ]
 
 baseSMBCIncludeDirs = [

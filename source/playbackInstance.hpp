@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stellaInstance.hpp"
+#include "SMBCInstance.hpp"
 #include <string>
 #include <jaffarCommon/hash.hpp>
 #include <jaffarCommon/exceptions.hpp>
@@ -19,7 +19,7 @@ class PlaybackInstance
   public:
 
   // Initializes the playback module instance
-  PlaybackInstance(stella::EmuInstance *emu, const std::vector<std::string> &sequence, const std::string& cycleType) :
+  PlaybackInstance(smbc::EmuInstance *emu, const std::vector<std::string> &sequence, const std::string& cycleType) :
    _emu(emu)
   {
     // Getting full state size
@@ -152,7 +152,7 @@ class PlaybackInstance
   std::vector<stepData_t> _stepSequence;
 
   // Pointer to the contained emulator instance
-  stella::EmuInstance *const _emu;
+  smbc::EmuInstance *const _emu;
 
   // Full size of the game state
   size_t _fullStateSize;

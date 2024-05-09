@@ -86,6 +86,7 @@ const uint32_t* paletteRGB = defaultPaletteRGB;
 PPU::PPU(SMBEngine& engine) :
     engine(engine)
 {
+    printf("engine: %p\n", &engine);
     currentAddress = 0;
     writeToggle = false;
 }

@@ -34,9 +34,6 @@ class EmuInstanceBase
     
     auto workRam = getWorkRamPointer();
 
-    //  Getting RAM pointer and size
-    hash.Update(workRam, 128);
-
     jaffarCommon::hash::hash_t result;
     hash.Finalize(reinterpret_cast<uint8_t *>(&result));
     return result;
