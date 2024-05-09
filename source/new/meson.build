@@ -5,7 +5,6 @@ newSMBCSrc =  [
 
 newSMBCIncludeDirs = [
  '.',
- 'core/',
 ]
 
 newSMBCCompileArgs = [

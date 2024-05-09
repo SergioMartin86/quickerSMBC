@@ -10,7 +10,7 @@
 
 #include "controller.hpp"
 
-namespace stella
+namespace smbc
 {
 
 class EmuInstanceBase
@@ -39,7 +39,7 @@ class EmuInstanceBase
     bool isTypeRecognized = false;
 
     if (type == "None") { _controller.setController1Type(Controller::controller_t::none); isTypeRecognized = true; }
-    if (type == "Gamepad") { _controller.setController1Type(Controller::controller_t::gamepad);  isTypeRecognized = true; }
+    if (type == "Gamepad") { _controller.setController1Type(Controller::controller_t::joypad);  isTypeRecognized = true; }
 
     if (isTypeRecognized == false) JAFFAR_THROW_LOGIC("Input type not recognized: '%s'\n", type.c_str());
   }
@@ -49,7 +49,7 @@ class EmuInstanceBase
     bool isTypeRecognized = false;
 
     if (type == "None") { _controller.setController2Type(Controller::controller_t::none); isTypeRecognized = true; }
-    if (type == "Gamepad") { _controller.setController2Type(Controller::controller_t::gamepad);  isTypeRecognized = true; }
+    if (type == "Gamepad") { _controller.setController2Type(Controller::controller_t::joypad);  isTypeRecognized = true; }
     
     if (isTypeRecognized == false) JAFFAR_THROW_LOGIC("Input type not recognized: '%s'\n", type.c_str());
   }
@@ -122,7 +122,7 @@ class EmuInstanceBase
   protected:
 
   virtual bool loadROMImpl(const std::string &romData) = 0;
-  virtual void advanceStateImpl(const stella::Controller controller) = 0;
+  virtual void advanceStateImpl(const smbc::Controller controller) = 0;
 
   virtual void enableStateBlockImpl(const std::string& block) {};
   virtual void disableStateBlockImpl(const std::string& block) {};
@@ -142,4 +142,4 @@ class EmuInstanceBase
   size_t _differentialStateSize;
 };
 
-} // namespace stella
+} // namespace smbc

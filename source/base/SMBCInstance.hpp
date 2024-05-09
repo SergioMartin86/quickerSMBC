@@ -58,7 +58,7 @@ class EmuInstance : public EmuInstanceBase
 
   size_t getStateSizeImpl() const override
   {
-    return 0
+    return 0;
   }
 
   uint8_t* getWorkRamPointer() const override

@@ -27,6 +27,6 @@ foreach testFile : testSet
        bash,
        workdir : meson.current_source_dir(),
        timeout: testTimeout,
-       args : [ 'run_test.sh', baseStellaTester.path(),  newStellaTester.path(), testFile + '.test', testFile + '.sol' ],
+       args : [ 'run_test.sh', baseSMBCTester.path(),  newSMBCTester.path(), testFile + '.test', testFile + '.sol' ],
        suite : [ testSuite ])
 endforeach
