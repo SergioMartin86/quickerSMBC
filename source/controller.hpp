@@ -14,16 +14,18 @@ class Controller
 {
 public:
 
-  enum controller_t { none, joypad };
-
-  typedef uint32_t port_t;
-
   struct input_t
   {
+    bool buttonA = false;
+    bool buttonB = false;
+    bool buttonSelect = false;
+    bool buttonStart = false;
+    bool buttonUp = false;
+    bool buttonDown = false;
+    bool buttonLeft = false;
+    bool buttonRight = false;
     bool power = false;
     bool reset = false;
-    port_t port1 = 0;
-    port_t port2 = 0;
   };
 
   inline bool parseInputString(const std::string& input)
@@ -41,10 +43,7 @@ public:
     isValid &= parseConsoleInputs(_input.reset, _input.power, ss);
 
     // Parsing controller 1 inputs
-    isValid &= parseControllerInputs(_controller1Type, _input.port1, ss);
-
-    // Parsing controller 1 inputs
-    isValid &= parseControllerInputs(_controller2Type, _input.port2, ss);
+    isValid &= parseControllerInputs(_input, ss);
 
     // End separator
     if (ss.get() != '|') isValid = false;
@@ -57,94 +56,78 @@ public:
     return isValid;
   };
 
-  inline void setController1Type(const controller_t type) { _controller1Type = type; }
-  inline void setController2Type(const controller_t type) { _controller2Type = type; }
-
-  inline bool getPowerButtonState() { return _input.power; }
-  inline bool getResetButtonState() { return _input.reset; }
-  inline port_t getController1Code() { return _input.port1; }
-  inline port_t getController2Code() { return _input.port2; }
+  inline input_t getInput() { return _input; }
 
   private:
 
-  static bool parseJoyPadInput(uint8_t& code, std::istringstream& ss)
+  static bool parseJoyPadInput(input_t& input, std::istringstream& ss)
   {
     // Currently read character
     char c;
 
     // Cleaning code
-    code = 0;
+    input.buttonA = false;
+    input.buttonB = false;
+    input.buttonSelect = false;
+    input.buttonStart = false;
+    input.buttonUp = false;
+    input.buttonDown = false;
+    input.buttonLeft = false;
+    input.buttonRight = false;
 
     // Up
     c = ss.get();
     if (c != '.' && c != 'U') return false;
-    if (c == 'U') code |= 0b00010000;
+    if (c == 'U') input.buttonUp = true;
 
     // Down
     c = ss.get();
     if (c != '.' && c != 'D') return false;
-    if (c == 'D') code |= 0b00100000;
+    if (c == 'D') input.buttonDown = true;
 
     // Left
     c = ss.get();
     if (c != '.' && c != 'L') return false;
-    if (c == 'L') code |= 0b01000000;
+    if (c == 'L') input.buttonLeft = true;
 
     // Right
     c = ss.get();
     if (c != '.' && c != 'R') return false;
-    if (c == 'R') code |= 0b10000000;
+    if (c == 'R') input.buttonRight = true;
 
     // Start
     c = ss.get();
     if (c != '.' && c != 'S') return false;
-    if (c == 'S') code |= 0b00001000;
+    if (c == 'S') input.buttonStart= true;
 
     // Select
     c = ss.get();
     if (c != '.' && c != 's') return false;
-    if (c == 's') code |= 0b00000100;
+    if (c == 's') input.buttonLeft = true;
 
     // B
     c = ss.get();
     if (c != '.' && c != 'B') return false;
-    if (c == 'B') code |= 0b00000010;
+    if (c == 'B') input.buttonB = true;
 
     // A
     c = ss.get();
     if (c != '.' && c != 'A') return false;
-    if (c == 'A') code |= 0b00000001;
+    if (c == 'A') input.buttonA = true;
 
     return true;
   }
 
-  static bool parseControllerInputs(const controller_t type, port_t& port, std::istringstream& ss)
+  static bool parseControllerInputs(input_t& input, std::istringstream& ss)
   {
     // Parse valid flag
     bool isValid = true; 
  
-    // If no controller assigned then, its port is all zeroes.
-    if (type == controller_t::none) { port = 0; return true; }
-
     // Controller separator
     if (ss.get() != '|') isValid = false;
 
-    // If normal joypad, parse its code now
-    if (type == controller_t::joypad) 
-    {
-      // Storage for joypad's code
-      uint8_t code = 0;
-
-      // Parsing joypad code
-      isValid &= parseJoyPadInput(code, ss);
-
-      // Pushing input code into the port
-      port = code;
-
-      // Adding joypad signature
-      // Per https://www.nesdev.org/wiki/Standard_controller, the joypad reports 1s after the first 8 bits
-      port |= ~0xFF;
-    }
+    // Parsing joypad code
+    isValid &= parseJoyPadInput(input, ss);
 
     // Return valid flag
     return isValid;
@@ -175,9 +158,6 @@ public:
   }
 
   input_t _input;
-  controller_t _controller1Type;
-  controller_t _controller2Type;
-  
 }; // class Controller
 
 } // namespace quickNES

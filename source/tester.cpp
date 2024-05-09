@@ -86,12 +86,6 @@ int main(int argc, char *argv[])
   std::string stateDisabledBlocksOutput;
   for (const auto& entry : stateDisabledBlocks) stateDisabledBlocksOutput += entry + std::string(" ");
   
-  // Getting Controller 1 type
-  const auto controller1Type = jaffarCommon::json::getString(configJs, "Controller 1 Type");
-
-  // Getting Controller 2 type
-  const auto controller2Type = jaffarCommon::json::getString(configJs, "Controller 2 Type");
-
   // Getting differential compression configuration
   if (configJs.contains("Differential Compression") == false) JAFFAR_THROW_LOGIC("Script file missing 'Differential Compression' entry\n");
   if (configJs["Differential Compression"].is_object() == false) JAFFAR_THROW_LOGIC("Script file 'Differential Compression' entry is not a key/value object\n");
@@ -114,10 +108,6 @@ int main(int argc, char *argv[])
 
   // Initializing emulator instance
   e.initialize();
-
-  // Setting controller types
-  e.setController1Type(controller1Type);
-  e.setController2Type(controller2Type);
 
   // Disable rendering
   e.disableRendering();
@@ -171,7 +161,6 @@ int main(int argc, char *argv[])
   printf("[] Cycle Type:                             '%s'\n", cycleType.c_str());
   printf("[] Emulation Core:                         '%s'\n", emulationCoreName.c_str());
   printf("[] ROM File:                               '%s'\n", romFilePath.c_str());
-  printf("[] Controller Types:                       '%s' / '%s'\n", controller1Type.c_str(), controller2Type.c_str());
   printf("[] ROM Hash:                               'SHA1: %s'\n", romSHA1.c_str());
   printf("[] Sequence File:                          '%s'\n", sequenceFilePath.c_str());
   printf("[] Sequence Length:                        %lu\n", sequenceLength);

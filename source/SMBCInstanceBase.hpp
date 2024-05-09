@@ -25,33 +25,7 @@ class EmuInstanceBase
     bool isInputValid = _controller.parseInputString(move);
     if (isInputValid == false) JAFFAR_THROW_LOGIC("Move provided cannot be parsed: '%s'\n", move.c_str());
 
-    // Parsing power
-    if (_controller.getPowerButtonState() == true) JAFFAR_THROW_RUNTIME("Power button pressed, but not supported: '%s'\n", move.c_str());
-
-    // Parsing reset
-    if (_controller.getResetButtonState() == true) doSoftReset();
-
     advanceStateImpl(_controller);
-  }
-
-  inline void setController1Type(const std::string& type)
-  {
-    bool isTypeRecognized = false;
-
-    if (type == "None") { _controller.setController1Type(Controller::controller_t::none); isTypeRecognized = true; }
-    if (type == "Gamepad") { _controller.setController1Type(Controller::controller_t::joypad);  isTypeRecognized = true; }
-
-    if (isTypeRecognized == false) JAFFAR_THROW_LOGIC("Input type not recognized: '%s'\n", type.c_str());
-  }
-
-  inline void setController2Type(const std::string& type)
-  {
-    bool isTypeRecognized = false;
-
-    if (type == "None") { _controller.setController2Type(Controller::controller_t::none); isTypeRecognized = true; }
-    if (type == "Gamepad") { _controller.setController2Type(Controller::controller_t::joypad);  isTypeRecognized = true; }
-    
-    if (isTypeRecognized == false) JAFFAR_THROW_LOGIC("Input type not recognized: '%s'\n", type.c_str());
   }
 
   inline jaffarCommon::hash::hash_t getStateHash() const
