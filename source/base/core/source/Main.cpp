@@ -42,6 +42,11 @@ bool loadRomImage(uint8_t* buffer, size_t size)
     return true;
 }
 
+uint8_t* getRamPointer()
+{
+  return smbEngine->getRamPointer();
+}
+
 /**
  * Initialize libraries for use.
  */
@@ -147,7 +152,6 @@ void advanceFrame(bool buttonUp, bool buttonDown, bool buttonLeft, bool buttonRi
     controller1.setButtonState(BUTTON_LEFT, buttonLeft);
     controller1.setButtonState(BUTTON_RIGHT, buttonRight);
 
-    printf("Advancing Frame...\n");
     smbEngine->update();
     if (_doRendering) smbEngine->render(renderBuffer);
 }

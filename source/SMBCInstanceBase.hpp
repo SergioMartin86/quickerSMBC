@@ -32,7 +32,9 @@ class EmuInstanceBase
   {
     MetroHash128 hash;
     
-    auto workRam = getWorkRamPointer();
+    auto workRam = getRamPointer();
+
+    hash.Update(workRam, 0x800);
 
     jaffarCommon::hash::hash_t result;
     hash.Finalize(reinterpret_cast<uint8_t *>(&result));
@@ -81,7 +83,6 @@ class EmuInstanceBase
 
   // Virtual functions
 
-  virtual uint8_t* getWorkRamPointer() const = 0;
   virtual void updateRenderer() = 0;
   virtual void serializeState(jaffarCommon::serializer::Base& s) const = 0;
   virtual void deserializeState(jaffarCommon::deserializer::Base& d) = 0;
@@ -101,6 +102,8 @@ class EmuInstanceBase
   virtual size_t getStateSizeImpl() const = 0;
   virtual size_t getDifferentialStateSizeImpl() const = 0;
   
+  virtual uint8_t* getRamPointer() const = 0;
+
   // State size
   size_t _stateSize;
 

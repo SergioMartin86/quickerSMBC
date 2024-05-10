@@ -61,7 +61,7 @@ class EmuInstance : public EmuInstanceBase
     return 0;
   }
 
-  uint8_t* getWorkRamPointer() const override
+  uint8_t* getRamPointer() const override
   {
     return nullptr;
   }

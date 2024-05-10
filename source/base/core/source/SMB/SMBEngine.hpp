@@ -66,6 +66,8 @@ public:
     void saveState(uint8_t* state) const;
     void loadState(const uint8_t* state);
 
+    uint8_t* getRamPointer() { return ram; }
+
 private:
     // NES Emulation subsystems:
     APU* apu;

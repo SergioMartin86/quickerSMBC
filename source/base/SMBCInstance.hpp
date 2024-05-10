@@ -21,6 +21,7 @@ extern void disableRendering();
 extern size_t getStateSize();
 extern void saveState(uint8_t* buffer);
 extern void loadState(const uint8_t* buffer);
+extern uint8_t* getRamPointer();
 
 namespace smbc
 {
@@ -86,11 +87,6 @@ class EmuInstance : public EmuInstanceBase
     return ::getStateSize();
   }
 
-  uint8_t* getWorkRamPointer() const override
-  {
-    return nullptr;
-  }
-
   void updateRenderer() override
   {
     ::renderFrame();
@@ -118,8 +114,10 @@ class EmuInstance : public EmuInstanceBase
     ::reset();
   }
 
+
   std::string getCoreName() const override { return "Base SMBC"; }
 
+  virtual uint8_t* getRamPointer() const { return ::getRamPointer(); }
 
   void advanceStateImpl(smbc::Controller controller) override
   {
