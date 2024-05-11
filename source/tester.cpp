@@ -114,11 +114,14 @@ int main(int argc, char *argv[])
   
   // Loading ROM File
   std::string romFileData;
-  if (jaffarCommon::file::loadStringFromFile(romFileData, romFilePath) == false) JAFFAR_THROW_LOGIC("Could not rom file: %s\n", romFilePath.c_str());
+  if (romFilePath != "")
+   if (jaffarCommon::file::loadStringFromFile(romFileData, romFilePath) == false) 
+   JAFFAR_THROW_LOGIC("Could not rom file: %s\n", romFilePath.c_str());
   e.loadROM(romFilePath);
 
   // Calculating ROM SHA1
-  auto romSHA1 = jaffarCommon::hash::getSHA1String(romFileData);
+  std::string romSHA1;
+  if (romFilePath != "") romSHA1 = jaffarCommon::hash::getSHA1String(romFileData);
 
   // If an initial state is provided, load it now
   if (initialStateFilePath != "")
@@ -140,7 +143,7 @@ int main(int argc, char *argv[])
   const auto fullDifferentialStateSize = fixedDiferentialStateSize + differentialCompressionMaxDifferences;
 
   // Checking with the expected SHA1 hash
-  if (romSHA1 != expectedROMSHA1) JAFFAR_THROW_LOGIC("Wrong ROM SHA1. Found: '%s', Expected: '%s'\n", romSHA1.c_str(), expectedROMSHA1.c_str());
+  if (romFilePath != "") if (romSHA1 != expectedROMSHA1) JAFFAR_THROW_LOGIC("Wrong ROM SHA1. Found: '%s', Expected: '%s'\n", romSHA1.c_str(), expectedROMSHA1.c_str());
 
   // Loading sequence file
   std::string sequenceRaw;
@@ -161,7 +164,10 @@ int main(int argc, char *argv[])
   printf("[] Cycle Type:                             '%s'\n", cycleType.c_str());
   printf("[] Emulation Core:                         '%s'\n", emulationCoreName.c_str());
   printf("[] ROM File:                               '%s'\n", romFilePath.c_str());
+  if (romFilePath != "")
+  {
   printf("[] ROM Hash:                               'SHA1: %s'\n", romSHA1.c_str());
+  }
   printf("[] Sequence File:                          '%s'\n", sequenceFilePath.c_str());
   printf("[] Sequence Length:                        %lu\n", sequenceLength);
   printf("[] State Size:                             %lu bytes - Disabled Blocks:  [ %s ]\n", stateSize, stateDisabledBlocksOutput.c_str());

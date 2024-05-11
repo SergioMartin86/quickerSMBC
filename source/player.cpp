@@ -112,17 +112,18 @@ int main(int argc, char *argv[])
 
   // Loading ROM File
   std::string romFileData;
-  if (jaffarCommon::file::loadStringFromFile(romFileData, romFilePath) == false) JAFFAR_THROW_LOGIC("Could not rom file: %s\n", romFilePath.c_str());
+  if (romFilePath != "") if (jaffarCommon::file::loadStringFromFile(romFileData, romFilePath) == false) JAFFAR_THROW_LOGIC("Could not rom file: %s\n", romFilePath.c_str());
   e.loadROM(romFilePath);
 
   // Disabling requested blocks from state serialization
   for (const auto& block : stateDisabledBlocks) e.disableStateBlock(block);
 
   // Calculating ROM SHA1
-  auto romSHA1 = jaffarCommon::hash::getSHA1String(romFileData);
+  std::string romSHA1;
+  if (romFilePath != "") romSHA1 = jaffarCommon::hash::getSHA1String(romFileData);
 
   // Checking with the expected SHA1 hash
-  if (romSHA1 != expectedROMSHA1) JAFFAR_THROW_LOGIC("Wrong ROM SHA1. Found: '%s', Expected: '%s'\n", romSHA1.c_str(), expectedROMSHA1.c_str());
+  if (romFilePath != "") if (romSHA1 != expectedROMSHA1) JAFFAR_THROW_LOGIC("Wrong ROM SHA1. Found: '%s', Expected: '%s'\n", romSHA1.c_str(), expectedROMSHA1.c_str());
 
   // If an initial state is provided, load it now
   if (initialStateFilePath != "")

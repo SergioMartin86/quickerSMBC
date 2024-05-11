@@ -8,7 +8,7 @@
 #include <jaffarCommon/serializers/contiguous.hpp>
 #include <jaffarCommon/deserializers/contiguous.hpp>
 
-extern bool loadRomImage(uint8_t* buffer, size_t size);
+extern bool loadRomImage(uint8_t* buffer);
 extern bool initializeVideo();
 extern void finalizeVideo();
 extern void reset();
@@ -45,8 +45,10 @@ class EmuInstance : public EmuInstanceBase
   virtual bool loadROMImpl(const std::string &romFilePath) override
   {
     std::string romData;
-    jaffarCommon::file::loadStringFromFile(romData, romFilePath);
-    loadRomImage((uint8_t*)romData.data(), romData.size());
+    auto ptr = (uint8_t*)romData.data();
+    if (romFilePath != "") jaffarCommon::file::loadStringFromFile(romData, romFilePath);
+    else ptr = nullptr;
+    loadRomImage(ptr);
     return true;
   }
 

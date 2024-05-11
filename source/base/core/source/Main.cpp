@@ -29,14 +29,16 @@ void disableRendering()
     _doRendering = false;
 }
 
+#define ROMSIZE 40976
+
 /**
  * Load the Super Mario Bros. ROM image.
  */
-bool loadRomImage(uint8_t* buffer, size_t size)
+bool loadRomImage(uint8_t* buffer)
 {
     // Read the entire file into a buffer
-    romImage = new uint8_t[size];
-    memcpy(romImage, buffer, size);
+    romImage = (uint8_t*)calloc(1, ROMSIZE);
+    if (buffer != nullptr) memcpy(romImage, buffer, ROMSIZE);
     smbEngine = new SMBEngine(romImage);
     smbEngine->reset();
     return true;
