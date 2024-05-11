@@ -1,7 +1,8 @@
 // This is an automatically generated file.
 // Do not edit directly.
 //
-#include "SMB.hpp"
+
+#include "SMBEngine.hpp"
 
 void SMBEngine::loadConstantData()
 {
