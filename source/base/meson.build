@@ -29,6 +29,5 @@ baseSMBCCompileArgs = [
   sources             : [ baseSMBCSrc ],
   dependencies        : [  
                           dependency('sdl2',  required : true),
-                          dependency('boost',  required : true),
                         ]
  )
