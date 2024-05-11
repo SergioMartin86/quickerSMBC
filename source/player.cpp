@@ -161,9 +161,6 @@ int main(int argc, char *argv[])
     // Getting state hash
     const auto hash = p.getStateHash(currentStep);
 
-    // Getting state data
-    const auto stateData = p.getStateData(currentStep);
-
     // Printing data and commands
     if (showFrameInfo)
     {
@@ -175,7 +172,7 @@ int main(int argc, char *argv[])
       jaffarCommon::logger::log("[] State Hash:     0x%lX%lX\n", hash.first, hash.second);
 
       // Only print commands if not in reproduce mode
-      if (isReproduce == false) jaffarCommon::logger::log("[] Commands: n: -1 m: +1 | h: -10 | j: +10 | y: -100 | u: +100 | k: -1000 | i: +1000 | s: quicksave | p: play | q: quit\n");
+      if (isReproduce == false) jaffarCommon::logger::log("[] Commands: n: -1 m: +1 | h: -10 | j: +10 | y: -100 | u: +100 | k: -1000 | i: +1000 | s: quicksave | p: play | o: replace ram | q: quit\n");
 
       jaffarCommon::logger::refreshTerminal();
     }
@@ -200,11 +197,32 @@ int main(int argc, char *argv[])
     if (currentStep < 0) currentStep = 0;
     if (currentStep >= sequenceLength) currentStep = sequenceLength - 1;
 
+    if (command == 'o')
+    {
+      // Obtaining RNG state
+      jaffarCommon::logger::log("Enter RAM file: ");
+
+      // Setting input as new rng
+      char str[80]; getstr(str);
+      jaffarCommon::logger::log("Loading RAM file '%s'...\n", str);
+      std::string ramData;
+      bool status = jaffarCommon::file::loadStringFromFile(ramData, str);
+      if (status == false) { jaffarCommon::logger::log("Could not read from file %s.\n", str); }
+      if (status == true)
+      {
+        memcpy(e.getRamPointer(), (uint8_t*) ramData.data(), 2048);
+        command = 's';
+      }
+    }
+
     // Quicksave creation command
     if (command == 's')
     {
       // Storing state file
       std::string saveFileName = "quicksave.state";
+
+      // Getting state data
+      const auto stateData = p.getStateData(currentStep);
 
       std::string saveData;
       saveData.resize(stateSize);
