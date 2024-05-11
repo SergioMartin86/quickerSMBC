@@ -3,7 +3,7 @@
 
 #include <SDL2/SDL.h>
 
-#include "../Configuration.hpp"
+// #include "../Configuration.hpp"
 
 #include "APU.hpp"
 

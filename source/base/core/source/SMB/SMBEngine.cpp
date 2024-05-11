@@ -1,6 +1,6 @@
 #include <cstring>
 #include <cstdlib>
-#include "../Configuration.hpp"
+// #include "../Configuration.hpp"
 
 #include "../Emulation/APU.hpp"
 #include "../Emulation/Controller.hpp"

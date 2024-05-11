@@ -10,7 +10,7 @@
 
 #include "SMBDataPointers.hpp"
 
-#include "../Configuration.hpp"
+// #include "../Configuration.hpp"
 #include "../Emulation/APU.hpp"
 #include "../Emulation/Controller.hpp"
 #include "../Emulation/PPU.hpp"
