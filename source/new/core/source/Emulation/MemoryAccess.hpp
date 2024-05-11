@@ -2,6 +2,7 @@
 #define MEMORYACCESS_HPP
 
 #include <cstdint>
+#include <common.hpp>
 
 class SMBEngine;
 
@@ -11,40 +12,144 @@ class SMBEngine;
 class MemoryAccess
 {
 public:
-    /**
-     * Construct a MemoryAccess to a location.
-     */
-    MemoryAccess(SMBEngine& engine, uint8_t* value);
+MemoryAccess(SMBEngine& engine, uint8_t* value) :
+    engine(engine)
+{
+    this->value = value;
+}
 
-    /**
-     * Construct a MemoryAccess to a constant value.
-     */
-    MemoryAccess(SMBEngine& engine, uint8_t constant);
+MemoryAccess(SMBEngine& engine, uint8_t constant) :
+    engine(engine)
+{
+    this->constant = constant;
+    this->value = &this->constant;
+}
 
-    MemoryAccess& operator = (uint8_t value);
-    MemoryAccess& operator = (const MemoryAccess& rhs);
-    MemoryAccess& operator += (uint8_t value);
-    MemoryAccess& operator -= (uint8_t value);
-    MemoryAccess& operator ++ ();
-    MemoryAccess& operator -- ();
-    MemoryAccess& operator ++ (int unused);
-    MemoryAccess& operator -- (int unused);
-    MemoryAccess& operator &= (uint8_t value);
-    MemoryAccess& operator |= (uint8_t value);
-    MemoryAccess& operator ^= (uint8_t value);
-    MemoryAccess& operator <<= (int shift);
-    MemoryAccess& operator >>= (int shift);
-    operator uint8_t();
+inline MemoryAccess& operator = (uint8_t value)
+{
+    *(this->value) = value;
+    setZN(value);
+    return *this;
+}
 
-    /**
-     * Circular left bit rotation.
-     */
-    void rol();
+inline MemoryAccess& operator = (const MemoryAccess& rhs)
+{
+    return ((*this) = *(rhs.value));
+}
 
-    /**
-     * Circular right bit rotation.
-     */
-    void ror();
+inline MemoryAccess& operator += (uint8_t value)
+{
+    uint16_t temp = *(this->value) + value + (c ? 1 : 0);
+    *(this->value) = temp & 0xff;
+    setZN(*(this->value));
+    c = temp > 0xff;
+    return *this;
+}
+
+inline MemoryAccess& operator -= (uint8_t value)
+{
+    uint16_t temp = *(this->value) - value - (c ? 0 : 1);
+    *(this->value) = (temp & 0xff);
+    setZN(*(this->value));
+    c = temp < 0x100;
+    return *this;
+}
+
+inline MemoryAccess& operator ++ ()
+{
+    *(this->value) = *(this->value) + 1;
+    setZN(*(this->value));
+    return *this;
+}
+
+inline MemoryAccess& operator -- ()
+{
+    *(this->value) = *(this->value) - 1;
+    setZN(*(this->value));
+    return *this;
+}
+
+inline MemoryAccess& operator ++ (int unused)
+{
+    return ++(*this);
+}
+
+inline MemoryAccess& operator -- (int unused)
+{
+    return --(*this);
+}
+
+inline MemoryAccess& operator &= (uint8_t value)
+{
+    *(this->value) &= value;
+    setZN(*(this->value));
+    return *this;
+}
+
+inline MemoryAccess& operator |= (uint8_t value)
+{
+    *(this->value) |= value;
+    setZN(*(this->value));
+    return *this;
+}
+
+inline MemoryAccess& operator ^= (uint8_t value)
+{
+    *(this->value) ^= value;
+    setZN(*(this->value));
+    return *this;
+}
+
+inline MemoryAccess& operator <<= (int shift)
+{
+    for (int i = 0; i < shift; i++)
+    {
+        c = *(this->value) & (1 << 7);
+        *(this->value) = (*(this->value) << 1) & 0xfe;
+        setZN(*(this->value));
+    }
+    return *this;
+}
+
+inline MemoryAccess& operator >>= (int shift)
+{
+    for (int i = 0; i < shift; i++)
+    {
+        c = *(this->value) & (1 << 0);
+        *(this->value) = (*(this->value) >> 1) & 0x7f;
+        setZN(*(this->value));
+    }
+    return *this;
+}
+
+inline operator uint8_t()
+{
+    return *value;
+}
+
+inline void rol()
+{
+    bool bit7 = *(this->value) & (1 << 7);
+    *(this->value) <<= 1;
+    if( c )
+    {
+        *(this->value) |= (1 << 0);
+    }
+    c = bit7;
+    setZN(*(this->value));
+}
+
+inline void ror()
+{
+    bool bit0 = *(this->value) & (1 << 0);
+    *(this->value) >>= 1;
+    if( c )
+    {
+        *(this->value) |= (1 << 7);
+    }
+    c = bit0;
+    setZN(*(this->value));
+}
 
     SMBEngine& engine;
     uint8_t* value;

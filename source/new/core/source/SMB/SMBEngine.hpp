@@ -76,9 +76,6 @@ private:
     Controller* controller2;
 
     // Fields for NES CPU emulation:
-    bool c;                      /**< Carry flag. */
-    bool z;                      /**< Zero flag. */
-    bool n;                      /**< Negative flag. */
     uint8_t registerA;           /**< Accumulator register. */
     uint8_t registerX;           /**< X index register. */
     uint8_t registerY;           /**< Y index register. */
@@ -168,11 +165,6 @@ private:
      * Read data from an address in the NES address space.
      */
     uint8_t readData(uint16_t address);
-
-    /**
-     * Set the zero and negative flags based on a result value.
-     */
-    void setZN(uint8_t value);
 
     /**
      * Write data to an address in the NES address space.

@@ -7,6 +7,7 @@
 #include "../Emulation/PPU.hpp"
 
 #include "SMBEngine.hpp"
+#include <common.hpp>
 
 #define DATA_STORAGE_OFFSET 0x8000 // Starting address for storing constant data
 
@@ -282,12 +283,6 @@ uint8_t SMBEngine::readData(uint16_t address)
     }
 
     return 0;
-}
-
-void SMBEngine::setZN(uint8_t value)
-{
-    z = (value == 0);
-    n = (value & (1 << 7)) != 0;
 }
 
 void SMBEngine::writeData(uint16_t address, uint8_t value)

@@ -2,6 +2,7 @@
 // Do not edit directly.
 //
 #include "SMB.hpp"
+#include <common.hpp>
 
 void SMBEngine::code(int mode)
 {
