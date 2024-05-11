@@ -168,10 +168,10 @@ void SMBEngine::update()
     code(1);
 
     // Update the APU
-    if (Configuration::getAudioEnabled())
-    {
-        apu->stepFrame();
-    }
+    // if (Configuration::getAudioEnabled())
+    // {
+    //     apu->stepFrame();
+    // }
 }
 
 //---------------------------------------------------------------------

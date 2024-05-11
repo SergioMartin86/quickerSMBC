@@ -8,7 +8,6 @@
 #include "Util/Video.hpp"
 #include "common.hpp"
 
-#include "Configuration.hpp"
 #include "Constants.hpp"
 
 uint8_t* romImage;
@@ -82,8 +81,8 @@ bool initializeVideo()
     window = SDL_CreateWindow(APP_TITLE,
                               SDL_WINDOWPOS_UNDEFINED,
                               SDL_WINDOWPOS_UNDEFINED,
-                              RENDER_WIDTH * Configuration::getRenderScale(),
-                              RENDER_HEIGHT * Configuration::getRenderScale(),
+                              RENDER_WIDTH,
+                              RENDER_HEIGHT,
                               0);
     if (window == nullptr)
     {
@@ -92,7 +91,7 @@ bool initializeVideo()
     }
 
     // Setup the renderer and texture buffer
-    renderer = SDL_CreateRenderer(window, -1, (Configuration::getVsyncEnabled() ? SDL_RENDERER_PRESENTVSYNC : 0) | SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
     if (renderer == nullptr)
     {
         std::cout << "SDL_CreateRenderer() failed during initialize(): " << SDL_GetError() << std::endl;
@@ -112,10 +111,6 @@ bool initializeVideo()
         return false;
     }
 
-    if (Configuration::getScanlinesEnabled())
-    {
-        scanlineTexture = generateScanlineTexture(renderer);
-    }
 
     return true;
 }

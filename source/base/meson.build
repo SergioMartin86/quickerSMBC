@@ -6,7 +6,6 @@ baseSMBCSrc =  [
  'core/source/Emulation/APU.cpp',
  'core/source/Emulation/MemoryAccess.cpp',
  'core/source/Emulation/Controller.cpp',
- 'core/source/Configuration.cpp',
  'core/source/SMB/SMBEngine.cpp',
  'core/source/SMB/SMB.cpp',
  'core/source/SMB/SMBData.cpp',
@@ -30,5 +29,6 @@ baseSMBCCompileArgs = [
   sources             : [ baseSMBCSrc ],
   dependencies        : [  
                           dependency('sdl2',  required : true),
+                          dependency('boost',  required : true),
                         ]
  )

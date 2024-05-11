@@ -242,11 +242,11 @@ inline void update()
     // Run the decompiled code for the NMI handler
     code(1);
 
-    // Update the APU
-    if (Configuration::getAudioEnabled())
-    {
-        apu->stepFrame();
-    }
+    // // Update the APU
+    // if (Configuration::getAudioEnabled())
+    // {
+    //     apu->stepFrame();
+    // }
 }
 
     uint8_t* getRamPointer() { return ram; }

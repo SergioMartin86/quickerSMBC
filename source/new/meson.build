@@ -5,7 +5,6 @@ quickerSMBCSrc =  [
  'core/source/Emulation/PPU.cpp',
  'core/source/Emulation/APU.cpp',
  'core/source/Emulation/Controller.cpp',
- 'core/source/Configuration.cpp',
  'core/source/SMB/SMBData.cpp',
  'core/source/Main.cpp',
  'core/source/common.cpp'
