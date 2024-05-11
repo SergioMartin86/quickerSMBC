@@ -98,7 +98,12 @@ inline size_t getStateSize()
  size += sizeof(x.constant);
  size += sizeof(y.constant);
  size += sizeof(s.constant);
- size += sizeof(dataStorage);
+
+ if (_storeDataStorageEnabled == true)
+ {
+    size += sizeof(dataStorage);
+ }
+
  size += sizeof(ram);
 // size += sizeof(chr);
  size += sizeof(returnIndexStack);
@@ -136,7 +141,12 @@ inline void saveState(uint8_t* state) const
  memcpy(ptr, &x.constant, sizeof(x.constant)); ptr += sizeof(x.constant);
  memcpy(ptr, &y.constant, sizeof(y.constant)); ptr += sizeof(y.constant);
  memcpy(ptr, &s.constant, sizeof(s.constant)); ptr += sizeof(s.constant);
- memcpy(ptr, &dataStorage, sizeof(dataStorage)); ptr += sizeof(dataStorage);
+ 
+ if (_storeDataStorageEnabled == true)
+ {
+    memcpy(ptr, &dataStorage, sizeof(dataStorage)); ptr += sizeof(dataStorage);
+ }
+
  memcpy(ptr, &ram, sizeof(ram)); ptr += sizeof(ram);
 // memcpy(ptr, &chr, sizeof(chr)); ptr += sizeof(chr);
  memcpy(ptr, &returnIndexStack, sizeof(returnIndexStack)); ptr += sizeof(returnIndexStack);
@@ -173,7 +183,12 @@ inline void loadState(const uint8_t* state)
  memcpy(&x.constant, ptr, sizeof(x.constant)); ptr += sizeof(x.constant);
  memcpy(&y.constant, ptr, sizeof(y.constant)); ptr += sizeof(y.constant);
  memcpy(&s.constant, ptr, sizeof(s.constant)); ptr += sizeof(s.constant);
- memcpy(&dataStorage, ptr, sizeof(dataStorage)); ptr += sizeof(dataStorage);
+
+ if (_storeDataStorageEnabled == true)
+ {
+     memcpy(&dataStorage, ptr, sizeof(dataStorage)); ptr += sizeof(dataStorage);
+ }
+ 
  memcpy(&ram, ptr, sizeof(ram)); ptr += sizeof(ram);
 // memcpy(&chr, ptr, sizeof(chr)); ptr += sizeof(chr);
  memcpy(&returnIndexStack, ptr, sizeof(returnIndexStack)); ptr += sizeof(returnIndexStack);

@@ -23,6 +23,7 @@ bool _doRendering = true;
 void enableStateBlock(const std::string& block)
 {
   if (block == "PPU") { _storePPUEnabled = true; return; }
+  if (block == "DST") { _storeDataStorageEnabled = true; return; }
 
   fprintf(stderr, "Property name: '%s' not recognized", block.c_str());
   exit(-1);
@@ -31,6 +32,7 @@ void enableStateBlock(const std::string& block)
 void disableStateBlock(const std::string& block)
 {
   if (block == "PPU") { _storePPUEnabled = false; return; }
+  if (block == "DST") { _storeDataStorageEnabled = false; return; }
 
   fprintf(stderr, "Property name: '%s' not recognized", block.c_str());
   exit(-1);
