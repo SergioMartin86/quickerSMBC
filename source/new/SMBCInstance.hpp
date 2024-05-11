@@ -22,6 +22,8 @@ extern size_t getStateSize();
 extern void saveState(uint8_t* buffer);
 extern void loadState(const uint8_t* buffer);
 extern uint8_t* getRamPointer();
+extern void enableStateBlock(const std::string& block);
+extern void disableStateBlock(const std::string& block);
 
 namespace smbc
 {
@@ -96,12 +98,12 @@ class EmuInstance : public EmuInstanceBase
 
   void enableStateBlockImpl(const std::string& block) override
   {
-    JAFFAR_THROW_LOGIC("State block name: '%s' not found.", block.c_str());
+    ::enableStateBlock(block);
   }
 
   void disableStateBlockImpl(const std::string& block) override
   {
-    JAFFAR_THROW_LOGIC("State block name: '%s' not found", block.c_str());
+    ::disableStateBlock(block);
   }
 
   void doSoftReset() override

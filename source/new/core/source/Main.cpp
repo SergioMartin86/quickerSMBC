@@ -6,6 +6,7 @@
 #include "Emulation/Controller.hpp"
 #include "SMB/SMBEngine.hpp"
 #include "Util/Video.hpp"
+#include "common.hpp"
 
 #include "Configuration.hpp"
 #include "Constants.hpp"
@@ -18,6 +19,22 @@ SDL_Texture* scanlineTexture;
 SMBEngine* smbEngine = nullptr;
 uint32_t renderBuffer[RENDER_WIDTH * RENDER_HEIGHT];
 bool _doRendering = true;
+
+void enableStateBlock(const std::string& block)
+{
+  if (block == "PPU") { _storePPUEnabled = true; return; }
+
+  fprintf(stderr, "Property name: '%s' not recognized", block.c_str());
+  exit(-1);
+}
+
+void disableStateBlock(const std::string& block)
+{
+  if (block == "PPU") { _storePPUEnabled = false; return; }
+
+  fprintf(stderr, "Property name: '%s' not recognized", block.c_str());
+  exit(-1);
+}
 
 void enableRendering()
 {

@@ -109,8 +109,13 @@ inline size_t getStateSize()
  size += sizeof(ppu->oamAddress);
  size += sizeof(ppu->ppuScrollX);
  size += sizeof(ppu->ppuScrollY);
- size += sizeof(ppu->palette);
- size += sizeof(ppu->nametable);
+
+ if (_storePPUEnabled == true)
+ {
+    size += sizeof(ppu->palette);
+    size += sizeof(ppu->nametable);
+ }
+
  size += sizeof(ppu->currentAddress);
  size += sizeof(ppu->writeToggle);
  size += sizeof(ppu->vramBuffer);
@@ -142,8 +147,13 @@ inline void saveState(uint8_t* state) const
  memcpy(ptr, &ppu->oamAddress, sizeof(ppu->oamAddress)); ptr += sizeof(ppu->oamAddress);
  memcpy(ptr, &ppu->ppuScrollX, sizeof(ppu->ppuScrollX)); ptr += sizeof(ppu->ppuScrollX);
  memcpy(ptr, &ppu->ppuScrollY, sizeof(ppu->ppuScrollY)); ptr += sizeof(ppu->ppuScrollY);
- memcpy(ptr, &ppu->palette, sizeof(ppu->palette)); ptr += sizeof(ppu->palette);
- memcpy(ptr, &ppu->nametable, sizeof(ppu->nametable)); ptr += sizeof(ppu->nametable);
+
+ if (_storePPUEnabled == true)
+ {
+    memcpy(ptr, &ppu->palette, sizeof(ppu->palette)); ptr += sizeof(ppu->palette);
+    memcpy(ptr, &ppu->nametable, sizeof(ppu->nametable)); ptr += sizeof(ppu->nametable);
+ }
+
  memcpy(ptr, &ppu->currentAddress, sizeof(ppu->currentAddress)); ptr += sizeof(ppu->currentAddress);
  memcpy(ptr, &ppu->writeToggle, sizeof(ppu->writeToggle)); ptr += sizeof(ppu->writeToggle);
  memcpy(ptr, &ppu->vramBuffer, sizeof(ppu->vramBuffer)); ptr += sizeof(ppu->vramBuffer);
@@ -174,8 +184,13 @@ inline void loadState(const uint8_t* state)
  memcpy(&ppu->oamAddress, ptr, sizeof(ppu->oamAddress)); ptr += sizeof(ppu->oamAddress);
  memcpy(&ppu->ppuScrollX, ptr, sizeof(ppu->ppuScrollX)); ptr += sizeof(ppu->ppuScrollX);
  memcpy(&ppu->ppuScrollY, ptr, sizeof(ppu->ppuScrollY)); ptr += sizeof(ppu->ppuScrollY);
- memcpy(&ppu->palette, ptr, sizeof(ppu->palette)); ptr += sizeof(ppu->palette);
- memcpy(&ppu->nametable, ptr, sizeof(ppu->nametable)); ptr += sizeof(ppu->nametable);
+
+ if (_storePPUEnabled == true)
+ {
+    memcpy(&ppu->palette, ptr, sizeof(ppu->palette)); ptr += sizeof(ppu->palette);
+    memcpy(&ppu->nametable, ptr, sizeof(ppu->nametable)); ptr += sizeof(ppu->nametable);
+ }
+ 
  memcpy(&ppu->currentAddress, ptr, sizeof(ppu->currentAddress)); ptr += sizeof(ppu->currentAddress);
  memcpy(&ppu->writeToggle, ptr, sizeof(ppu->writeToggle)); ptr += sizeof(ppu->writeToggle);
  memcpy(&ppu->vramBuffer, ptr, sizeof(ppu->vramBuffer)); ptr += sizeof(ppu->vramBuffer);
