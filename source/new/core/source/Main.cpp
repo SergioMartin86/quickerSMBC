@@ -117,17 +117,6 @@ bool initializeVideo()
         scanlineTexture = generateScanlineTexture(renderer);
     }
 
-    // Set up custom palette, if configured
-    //
-    if (!Configuration::getPaletteFileName().empty())
-    {
-        const uint32_t* palette = loadPalette(Configuration::getPaletteFileName());
-        if (palette)
-        {
-            paletteRGB = palette;
-        }
-    }
-
     return true;
 }
 

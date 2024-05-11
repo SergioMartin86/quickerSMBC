@@ -220,11 +220,16 @@ void SMBEngine::loadConstantData()
     // GameTextOffsets
     //
     const uint8_t GameTextOffsets_data[] = {
-        TopStatusBarLine - GameText, TopStatusBarLine - GameText,
-        WorldLivesDisplay - GameText, WorldLivesDisplay - GameText,
-        TwoPlayerTimeUp - GameText, OnePlayerTimeUp - GameText,
-        TwoPlayerGameOver - GameText, OnePlayerGameOver - GameText,
-        WarpZoneWelcome - GameText, WarpZoneWelcome - GameText
+        (uint8_t)(TopStatusBarLine - GameText),
+        (uint8_t)(TopStatusBarLine - GameText),
+        (uint8_t)(WorldLivesDisplay - GameText),
+        (uint8_t)(WorldLivesDisplay - GameText),
+        (uint8_t)(TwoPlayerTimeUp - GameText),
+        (uint8_t)(OnePlayerTimeUp - GameText),
+        (uint8_t)(TwoPlayerGameOver - GameText),
+        (uint8_t)(OnePlayerGameOver - GameText),
+        (uint8_t)(WarpZoneWelcome - GameText),
+        (uint8_t)(WarpZoneWelcome - GameText)
     };
     writeData(GameTextOffsets, GameTextOffsets_data, sizeof(GameTextOffsets_data));
 
@@ -918,10 +923,14 @@ void SMBEngine::loadConstantData()
     // WorldAddrOffsets
     //
     const uint8_t WorldAddrOffsets_data[] = {
-        World1Areas - AreaAddrOffsets, World2Areas - AreaAddrOffsets,
-        World3Areas - AreaAddrOffsets, World4Areas - AreaAddrOffsets,
-        World5Areas - AreaAddrOffsets, World6Areas - AreaAddrOffsets,
-        World7Areas - AreaAddrOffsets, World8Areas - AreaAddrOffsets
+        (uint8_t)(World1Areas - AreaAddrOffsets),
+        (uint8_t)(World2Areas - AreaAddrOffsets),
+        (uint8_t)(World3Areas - AreaAddrOffsets),
+        (uint8_t)(World4Areas - AreaAddrOffsets),
+        (uint8_t)(World5Areas - AreaAddrOffsets),
+        (uint8_t)(World6Areas - AreaAddrOffsets),
+        (uint8_t)(World7Areas - AreaAddrOffsets),
+        (uint8_t)(World8Areas - AreaAddrOffsets)
     };
     writeData(WorldAddrOffsets, WorldAddrOffsets_data, sizeof(WorldAddrOffsets_data));
 
@@ -3046,32 +3055,55 @@ void SMBEngine::loadConstantData()
     // MusicHeaderData
     //
     const uint8_t MusicHeaderData_data[] = {
-        DeathMusHdr - MHD, // event music
-        GameOverMusHdr - MHD,
-        VictoryMusHdr - MHD,
-        WinCastleMusHdr - MHD,
-        GameOverMusHdr - MHD,
-        EndOfLevelMusHdr - MHD,
-        TimeRunningOutHdr - MHD,
-        SilenceHdr - MHD,
-        GroundLevelPart1Hdr - MHD, // area music
-        WaterMusHdr - MHD,
-        UndergroundMusHdr - MHD,
-        CastleMusHdr - MHD,
-        Star_CloudHdr - MHD,
-        GroundLevelLeadInHdr - MHD,
-        Star_CloudHdr - MHD,
-        SilenceHdr - MHD,
-        GroundLevelLeadInHdr - MHD, // ground level music layout
-        GroundLevelPart1Hdr - MHD, GroundLevelPart1Hdr - MHD,
-        GroundLevelPart2AHdr - MHD, GroundLevelPart2BHdr - MHD, GroundLevelPart2AHdr - MHD, GroundLevelPart2CHdr - MHD,
-        GroundLevelPart2AHdr - MHD, GroundLevelPart2BHdr - MHD, GroundLevelPart2AHdr - MHD, GroundLevelPart2CHdr - MHD,
-        GroundLevelPart3AHdr - MHD, GroundLevelPart3BHdr - MHD, GroundLevelPart3AHdr - MHD, GroundLevelLeadInHdr - MHD,
-        GroundLevelPart1Hdr - MHD, GroundLevelPart1Hdr - MHD,
-        GroundLevelPart4AHdr - MHD, GroundLevelPart4BHdr - MHD, GroundLevelPart4AHdr - MHD, GroundLevelPart4CHdr - MHD,
-        GroundLevelPart4AHdr - MHD, GroundLevelPart4BHdr - MHD, GroundLevelPart4AHdr - MHD, GroundLevelPart4CHdr - MHD,
-        GroundLevelPart3AHdr - MHD, GroundLevelPart3BHdr - MHD, GroundLevelPart3AHdr - MHD, GroundLevelLeadInHdr - MHD,
-        GroundLevelPart4AHdr - MHD, GroundLevelPart4BHdr - MHD, GroundLevelPart4AHdr - MHD, GroundLevelPart4CHdr - MHD
+        (uint8_t)(DeathMusHdr - MHD),
+        (uint8_t)(GameOverMusHdr - MHD),
+        (uint8_t)(VictoryMusHdr - MHD),
+        (uint8_t)(WinCastleMusHdr - MHD),
+        (uint8_t)(GameOverMusHdr - MHD),
+        (uint8_t)(EndOfLevelMusHdr - MHD),
+        (uint8_t)(TimeRunningOutHdr - MHD),
+        (uint8_t)(SilenceHdr - MHD),
+        (uint8_t)(GroundLevelPart1Hdr - MHD),
+        (uint8_t)(WaterMusHdr - MHD),
+        (uint8_t)(UndergroundMusHdr - MHD),
+        (uint8_t)(CastleMusHdr - MHD),
+        (uint8_t)(Star_CloudHdr - MHD),
+        (uint8_t)(GroundLevelLeadInHdr - MHD),
+        (uint8_t)(Star_CloudHdr - MHD),
+        (uint8_t)(SilenceHdr - MHD),
+        (uint8_t)(GroundLevelLeadInHdr - MHD),
+        (uint8_t)(GroundLevelPart1Hdr  - MHD),
+        (uint8_t)(GroundLevelPart1Hdr  - MHD),
+        (uint8_t)(GroundLevelPart2AHdr - MHD),
+        (uint8_t)(GroundLevelPart2BHdr - MHD),
+        (uint8_t)(GroundLevelPart2AHdr - MHD),
+        (uint8_t)(GroundLevelPart2CHdr - MHD),
+        (uint8_t)(GroundLevelPart2AHdr - MHD),
+        (uint8_t)(GroundLevelPart2BHdr - MHD),
+        (uint8_t)(GroundLevelPart2AHdr - MHD),
+        (uint8_t)(GroundLevelPart2CHdr - MHD),
+        (uint8_t)(GroundLevelPart3AHdr - MHD),
+        (uint8_t)(GroundLevelPart3BHdr - MHD),
+        (uint8_t)(GroundLevelPart3AHdr - MHD),
+        (uint8_t)(GroundLevelLeadInHdr - MHD),
+        (uint8_t)(GroundLevelPart1Hdr  - MHD),
+        (uint8_t)(GroundLevelPart1Hdr  - MHD),
+        (uint8_t)(GroundLevelPart4AHdr - MHD),
+        (uint8_t)(GroundLevelPart4BHdr - MHD),
+        (uint8_t)(GroundLevelPart4AHdr - MHD),
+        (uint8_t)(GroundLevelPart4CHdr - MHD),
+        (uint8_t)(GroundLevelPart4AHdr - MHD),
+        (uint8_t)(GroundLevelPart4BHdr - MHD),
+        (uint8_t)(GroundLevelPart4AHdr - MHD),
+        (uint8_t)(GroundLevelPart4CHdr - MHD),
+        (uint8_t)(GroundLevelPart3AHdr - MHD),
+        (uint8_t)(GroundLevelPart3BHdr - MHD),
+        (uint8_t)(GroundLevelPart3AHdr - MHD),
+        (uint8_t)(GroundLevelLeadInHdr - MHD),
+        (uint8_t)(GroundLevelPart4AHdr - MHD),
+        (uint8_t)(GroundLevelPart4BHdr - MHD),
+        (uint8_t)(GroundLevelPart4AHdr - MHD),
+        (uint8_t)(GroundLevelPart4CHdr - MHD)
     };
     writeData(MusicHeaderData, MusicHeaderData_data, sizeof(MusicHeaderData_data));
 

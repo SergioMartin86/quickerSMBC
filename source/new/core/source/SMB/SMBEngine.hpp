@@ -505,7 +505,7 @@ ColdBoot: // clear memory using pointer in Y
     a |= BOOST_BINARY(10000000); // enable NMIs
     JSR(WritePPUReg1, 3);
 
-EndlessLoop: // endless loop, need I say more?
+// EndlessLoop: // endless loop, need I say more?
     return;
 
 NonMaskableInterrupt:
@@ -2120,7 +2120,7 @@ RemBridge: // write top left and top right
 
 //------------------------------------------------------------------------
 
-JumpEngine:
+// JumpEngine:
     a <<= 1; // shift bit from contents of A
     y = a;
     pla(); // pull saved return address from stack
@@ -7406,7 +7406,7 @@ SetXMoveAmt: // set movement amount here
 
 //------------------------------------------------------------------------
 
-ResidualGravityCode:
+// ResidualGravityCode:
     y = 0x00; // this part appears to be residual,
     goto Skip_6;
 
@@ -13887,7 +13887,7 @@ BlockBufferChk_Enemy:
     pla(); // pull A from stack and jump elsewhere
     goto BBChk_E;
 
-ResidualMiscObjectCode:
+// ResidualMiscObjectCode:
     a = x;
     c = 0; // supposedly used once to set offset for
     a += 0x0d; // miscellaneous objects

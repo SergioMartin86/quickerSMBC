@@ -96,12 +96,10 @@ class EmuInstance : public EmuInstanceBase
 
   void enableStateBlockImpl(const std::string& block) override
   {
-    JAFFAR_THROW_LOGIC("State block name: '%s' not found.", block.c_str());
   }
 
   void disableStateBlockImpl(const std::string& block) override
   {
-    JAFFAR_THROW_LOGIC("State block name: '%s' not found", block.c_str());
   }
 
   void doSoftReset() override
