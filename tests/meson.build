@@ -5,12 +5,11 @@ testTimeout = 240
 
 # Tests for copyrighted game roms (only for local testing or own CI runners)
 protectedTestSet = [ 
-  'frogger.anyPercent'
+  'world101a'
 ]
 
 # Tests for open source free roms (for public cloud testing)
 openSourceTestSet = [
-  'hellway.playaround',
 ]
 
 # Creating test set based on whether copyrighted roms are to be used
@@ -21,12 +20,10 @@ endif
 
 # Adding tests to the suite
 foreach testFile : testSet
-  testSuite = testFile.split('.')[0]
-  testName = testFile.split('.')[1]
-  test(testName,
+  test(testFile,
        bash,
        workdir : meson.current_source_dir(),
        timeout: testTimeout,
-       args : [ 'run_test.sh', baseSMBCTester.path(),  newSMBCTester.path(), testFile + '.test', testFile + '.sol' ],
-       suite : [ testSuite ])
+       args : [ 'run_test.sh', baseSMBCTester.path(),  quickerSMBCTester.path(), testFile + '.test', testFile + '.sol' ],
+       suite : [ 'smbc' ])
 endforeach

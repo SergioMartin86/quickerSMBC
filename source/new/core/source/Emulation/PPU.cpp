@@ -3,8 +3,6 @@
 
 #include "PPU.hpp"
 
-extern bool _doRendering;
-
 static const uint8_t nametableMirrorLookup[][4] = {
     {0, 0, 1, 1}, // Vertical
     {0, 1, 0, 1}  // Horizontal

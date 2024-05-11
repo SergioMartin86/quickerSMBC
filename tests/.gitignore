@@ -1,4 +1,5 @@
 *.nes
+callgrind*
 *.a26
 *.32x
 *.md

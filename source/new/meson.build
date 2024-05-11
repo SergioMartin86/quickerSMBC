@@ -1,21 +1,33 @@
-# newSMBC Core sources
+# quickerSMBC Core sources
 
-newSMBCSrc =  [
+quickerSMBCSrc =  [
+ 'core/source/Util/Video.cpp',
+ 'core/source/Emulation/PPU.cpp',
+ 'core/source/Emulation/APU.cpp',
+ 'core/source/Emulation/MemoryAccess.cpp',
+ 'core/source/Emulation/Controller.cpp',
+ 'core/source/Configuration.cpp',
+ 'core/source/SMB/SMBEngine.cpp',
+ 'core/source/SMB/SMB.cpp',
+ 'core/source/SMB/SMBData.cpp',
+ 'core/source/Main.cpp',
 ]
 
-newSMBCIncludeDirs = [
+quickerSMBCIncludeDirs = [
  '.',
+ 'core',
+ 'core/source',
 ]
 
-newSMBCCompileArgs = [
+quickerSMBCCompileArgs = [
 ]
 
-# newSMBC Core Configuration
+# quickerSMBC Core Configuration
 
- newSMBCDependency = declare_dependency(
-  compile_args        : [ newSMBCCompileArgs ],
-  include_directories : include_directories(newSMBCIncludeDirs),
-  sources             : [ newSMBCSrc ],
+ quickerSMBCDependency = declare_dependency(
+  compile_args        : [  quickerSMBCCompileArgs ],
+  include_directories : include_directories(quickerSMBCIncludeDirs),
+  sources             : [ quickerSMBCSrc ],
   dependencies        : [  
                           dependency('sdl2',  required : true),
                         ]
