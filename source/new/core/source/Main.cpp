@@ -13,19 +13,20 @@
 #include <jaffarCommon/serializers/base.hpp>
 #include <jaffarCommon/deserializers/base.hpp>
 
-uint8_t* romImage;
-SDL_Window* window;
-SDL_Renderer* renderer;
-SDL_Texture* texture;
-SDL_Texture* scanlineTexture;
-SMBEngine* smbEngine = nullptr;
-uint32_t renderBuffer[RENDER_WIDTH * RENDER_HEIGHT];
-bool _doRendering = false;
+thread_local uint8_t* romImage;
+thread_local SDL_Window* window;
+thread_local SDL_Renderer* renderer;
+thread_local SDL_Texture* texture;
+thread_local SDL_Texture* scanlineTexture;
+thread_local SMBEngine* smbEngine = nullptr;
+thread_local uint32_t renderBuffer[RENDER_WIDTH * RENDER_HEIGHT];
+thread_local bool _doRendering = false;
 
 void enableStateBlock(const std::string& block)
 {
   if (block == "PPU") { _storePPUEnabled = true; return; }
   if (block == "DST") { _storeDataStorageEnabled = true; return; }
+  if (block == "STK") { _storeStackEnabled = true; return; }
 
   fprintf(stderr, "Property name: '%s' not recognized", block.c_str());
   exit(-1);
@@ -35,6 +36,7 @@ void disableStateBlock(const std::string& block)
 {
   if (block == "PPU") { _storePPUEnabled = false; return; }
   if (block == "DST") { _storeDataStorageEnabled = false; return; }
+  if (block == "STK") { _storeStackEnabled = false; return; }
 
   fprintf(stderr, "Property name: '%s' not recognized", block.c_str());
   exit(-1);

@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <cstring>
 #include <cstdlib>
+#include <cstdio>
 
 #include "../Emulation/MemoryAccess.hpp"
 
@@ -107,7 +108,6 @@ inline size_t getStateSize()
  }
 
  size += sizeof(ram);
-// size += sizeof(chr);
  size += sizeof(returnIndexStack);
  size += sizeof(returnIndexStackTop);
  size += sizeof(ppu->ppuCtrl);
@@ -145,12 +145,17 @@ inline void saveState(jaffarCommon::serializer::Base& sr) const
  
  if (_storeDataStorageEnabled == true)
  {
-    sr.push(&dataStorage, sizeof(dataStorage)); 
+    sr.push(dataStorage, sizeof(dataStorage)); 
  }
 
- sr.push(&ram, sizeof(ram));
- sr.push(&returnIndexStack, sizeof(returnIndexStack));
- sr.push(&returnIndexStackTop, sizeof(returnIndexStackTop));
+ sr.push(ram, sizeof(ram));
+
+ if (_storeStackEnabled == true)
+ {
+    sr.push(returnIndexStack, sizeof(returnIndexStack));
+    sr.push(&returnIndexStackTop, sizeof(returnIndexStackTop));
+ }
+ 
  sr.push(&ppu->ppuCtrl, sizeof(ppu->ppuCtrl));
  sr.push(&ppu->ppuMask, sizeof(ppu->ppuMask));
  sr.push(&ppu->ppuStatus, sizeof(ppu->ppuStatus));
@@ -185,12 +190,17 @@ inline void loadState(jaffarCommon::deserializer::Base& d)
 
  if (_storeDataStorageEnabled == true)
  {
-     d.pop(&dataStorage, sizeof(dataStorage)); 
+     d.pop(dataStorage, sizeof(dataStorage)); 
  }
  
- d.pop(&ram, sizeof(ram));
- d.pop(&returnIndexStack, sizeof(returnIndexStack));
- d.pop(&returnIndexStackTop, sizeof(returnIndexStackTop)); 
+ d.pop(ram, sizeof(ram));
+
+ if (_storeStackEnabled == true)
+ {
+    d.pop(returnIndexStack, sizeof(returnIndexStack));
+    d.pop(&returnIndexStackTop, sizeof(returnIndexStackTop)); 
+ }
+
  d.pop(&ppu->ppuCtrl, sizeof(ppu->ppuCtrl)); 
  d.pop(&ppu->ppuMask, sizeof(ppu->ppuMask)); 
  d.pop(&ppu->ppuStatus, sizeof(ppu->ppuStatus));
