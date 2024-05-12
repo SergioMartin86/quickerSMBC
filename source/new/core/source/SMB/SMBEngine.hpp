@@ -18,6 +18,8 @@
 #include <common.hpp>
 // #include <boost/utility/binary.hpp>
 #include "SMBConstants.hpp"
+#include <jaffarCommon/serializers/base.hpp>
+#include <jaffarCommon/deserializers/base.hpp>
 
 /**
  * Read and access a byte from emulated memory.
@@ -127,88 +129,84 @@ inline size_t getStateSize()
  return size;
 }
 
-inline void saveState(uint8_t* state) const
+inline void saveState(jaffarCommon::serializer::Base& sr) const
 {
- uint8_t* ptr = state;
- memcpy(ptr, &c, sizeof(c)); ptr += sizeof(c);
- memcpy(ptr, &z, sizeof(z)); ptr += sizeof(z);
- memcpy(ptr, &n, sizeof(n)); ptr += sizeof(n);
- memcpy(ptr, &registerA, sizeof(registerA)); ptr += sizeof(registerA);
- memcpy(ptr, &registerX, sizeof(registerX)); ptr += sizeof(registerX);
- memcpy(ptr, &registerY, sizeof(registerY)); ptr += sizeof(registerY);
- memcpy(ptr, &registerS, sizeof(registerS)); ptr += sizeof(registerS);
- memcpy(ptr, &a.constant, sizeof(a.constant)); ptr += sizeof(a.constant);
- memcpy(ptr, &x.constant, sizeof(x.constant)); ptr += sizeof(x.constant);
- memcpy(ptr, &y.constant, sizeof(y.constant)); ptr += sizeof(y.constant);
- memcpy(ptr, &s.constant, sizeof(s.constant)); ptr += sizeof(s.constant);
+ sr.push(&c, sizeof(c));
+ sr.push(&z, sizeof(z));
+ sr.push(&n, sizeof(n));
+ sr.push(&registerA, sizeof(registerA)); 
+ sr.push(&registerX, sizeof(registerX)); 
+ sr.push(&registerY, sizeof(registerY)); 
+ sr.push(&registerS, sizeof(registerS)); 
+ sr.push(&a.constant, sizeof(a.constant)); 
+ sr.push(&x.constant, sizeof(x.constant)); 
+ sr.push(&y.constant, sizeof(y.constant)); 
+ sr.push(&s.constant, sizeof(s.constant)); 
  
  if (_storeDataStorageEnabled == true)
  {
-    memcpy(ptr, &dataStorage, sizeof(dataStorage)); ptr += sizeof(dataStorage);
+    sr.push(&dataStorage, sizeof(dataStorage)); 
  }
 
- memcpy(ptr, &ram, sizeof(ram)); ptr += sizeof(ram);
-// memcpy(ptr, &chr, sizeof(chr)); ptr += sizeof(chr);
- memcpy(ptr, &returnIndexStack, sizeof(returnIndexStack)); ptr += sizeof(returnIndexStack);
- memcpy(ptr, &returnIndexStackTop, sizeof(returnIndexStackTop)); ptr += sizeof(returnIndexStackTop);
- memcpy(ptr, &ppu->ppuCtrl, sizeof(ppu->ppuCtrl)); ptr += sizeof(ppu->ppuCtrl);
- memcpy(ptr, &ppu->ppuMask, sizeof(ppu->ppuMask)); ptr += sizeof(ppu->ppuMask);
- memcpy(ptr, &ppu->ppuStatus, sizeof(ppu->ppuStatus)); ptr += sizeof(ppu->ppuStatus);
- memcpy(ptr, &ppu->oamAddress, sizeof(ppu->oamAddress)); ptr += sizeof(ppu->oamAddress);
- memcpy(ptr, &ppu->ppuScrollX, sizeof(ppu->ppuScrollX)); ptr += sizeof(ppu->ppuScrollX);
- memcpy(ptr, &ppu->ppuScrollY, sizeof(ppu->ppuScrollY)); ptr += sizeof(ppu->ppuScrollY);
+ sr.push(&ram, sizeof(ram));
+ sr.push(&returnIndexStack, sizeof(returnIndexStack));
+ sr.push(&returnIndexStackTop, sizeof(returnIndexStackTop));
+ sr.push(&ppu->ppuCtrl, sizeof(ppu->ppuCtrl));
+ sr.push(&ppu->ppuMask, sizeof(ppu->ppuMask));
+ sr.push(&ppu->ppuStatus, sizeof(ppu->ppuStatus));
+ sr.push(&ppu->oamAddress, sizeof(ppu->oamAddress));
+ sr.push(&ppu->ppuScrollX, sizeof(ppu->ppuScrollX));
+ sr.push(&ppu->ppuScrollY, sizeof(ppu->ppuScrollY));
 
  if (_storePPUEnabled == true)
  {
-    memcpy(ptr, &ppu->palette, sizeof(ppu->palette)); ptr += sizeof(ppu->palette);
-    memcpy(ptr, &ppu->nametable, sizeof(ppu->nametable)); ptr += sizeof(ppu->nametable);
+    sr.push(&ppu->palette, sizeof(ppu->palette));
+    sr.push(&ppu->nametable, sizeof(ppu->nametable));
  }
 
- memcpy(ptr, &ppu->currentAddress, sizeof(ppu->currentAddress)); ptr += sizeof(ppu->currentAddress);
- memcpy(ptr, &ppu->writeToggle, sizeof(ppu->writeToggle)); ptr += sizeof(ppu->writeToggle);
- memcpy(ptr, &ppu->vramBuffer, sizeof(ppu->vramBuffer)); ptr += sizeof(ppu->vramBuffer);
+ sr.push(&ppu->currentAddress, sizeof(ppu->currentAddress));
+ sr.push(&ppu->writeToggle, sizeof(ppu->writeToggle));
+ sr.push(&ppu->vramBuffer, sizeof(ppu->vramBuffer));
 }
 
-inline void loadState(const uint8_t* state)
+inline void loadState(jaffarCommon::deserializer::Base& d)
 {
- const uint8_t* ptr = state;
- memcpy(&c, ptr, sizeof(c)); ptr += sizeof(c);
- memcpy(&z, ptr, sizeof(z)); ptr += sizeof(z);
- memcpy(&n, ptr, sizeof(n)); ptr += sizeof(n);
- memcpy(&registerA, ptr, sizeof(registerA)); ptr += sizeof(registerA);
- memcpy(&registerX, ptr, sizeof(registerX)); ptr += sizeof(registerX);
- memcpy(&registerY, ptr, sizeof(registerY)); ptr += sizeof(registerY);
- memcpy(&registerS, ptr, sizeof(registerS)); ptr += sizeof(registerS);
- memcpy(&a.constant, ptr, sizeof(a.constant)); ptr += sizeof(a.constant);
- memcpy(&x.constant, ptr, sizeof(x.constant)); ptr += sizeof(x.constant);
- memcpy(&y.constant, ptr, sizeof(y.constant)); ptr += sizeof(y.constant);
- memcpy(&s.constant, ptr, sizeof(s.constant)); ptr += sizeof(s.constant);
+ d.pop(&c, sizeof(c)); 
+ d.pop(&z, sizeof(z)); 
+ d.pop(&n, sizeof(n)); 
+ d.pop(&registerA, sizeof(registerA));   
+ d.pop(&registerX, sizeof(registerX));   
+ d.pop(&registerY, sizeof(registerY));   
+ d.pop(&registerS, sizeof(registerS));   
+ d.pop(&a.constant, sizeof(a.constant)); 
+ d.pop(&x.constant, sizeof(x.constant)); 
+ d.pop(&y.constant, sizeof(y.constant)); 
+ d.pop(&s.constant, sizeof(s.constant)); 
 
  if (_storeDataStorageEnabled == true)
  {
-     memcpy(&dataStorage, ptr, sizeof(dataStorage)); ptr += sizeof(dataStorage);
+     d.pop(&dataStorage, sizeof(dataStorage)); 
  }
  
- memcpy(&ram, ptr, sizeof(ram)); ptr += sizeof(ram);
-// memcpy(&chr, ptr, sizeof(chr)); ptr += sizeof(chr);
- memcpy(&returnIndexStack, ptr, sizeof(returnIndexStack)); ptr += sizeof(returnIndexStack);
- memcpy(&returnIndexStackTop, ptr, sizeof(returnIndexStackTop)); ptr += sizeof(returnIndexStackTop);
- memcpy(&ppu->ppuCtrl, ptr, sizeof(ppu->ppuCtrl)); ptr += sizeof(ppu->ppuCtrl);
- memcpy(&ppu->ppuMask, ptr, sizeof(ppu->ppuMask)); ptr += sizeof(ppu->ppuMask);
- memcpy(&ppu->ppuStatus, ptr, sizeof(ppu->ppuStatus)); ptr += sizeof(ppu->ppuStatus);
- memcpy(&ppu->oamAddress, ptr, sizeof(ppu->oamAddress)); ptr += sizeof(ppu->oamAddress);
- memcpy(&ppu->ppuScrollX, ptr, sizeof(ppu->ppuScrollX)); ptr += sizeof(ppu->ppuScrollX);
- memcpy(&ppu->ppuScrollY, ptr, sizeof(ppu->ppuScrollY)); ptr += sizeof(ppu->ppuScrollY);
+ d.pop(&ram, sizeof(ram));
+ d.pop(&returnIndexStack, sizeof(returnIndexStack));
+ d.pop(&returnIndexStackTop, sizeof(returnIndexStackTop)); 
+ d.pop(&ppu->ppuCtrl, sizeof(ppu->ppuCtrl)); 
+ d.pop(&ppu->ppuMask, sizeof(ppu->ppuMask)); 
+ d.pop(&ppu->ppuStatus, sizeof(ppu->ppuStatus));
+ d.pop(&ppu->oamAddress, sizeof(ppu->oamAddress));
+ d.pop(&ppu->ppuScrollX, sizeof(ppu->ppuScrollX));
+ d.pop(&ppu->ppuScrollY, sizeof(ppu->ppuScrollY));
 
  if (_storePPUEnabled == true)
  {
-    memcpy(&ppu->palette, ptr, sizeof(ppu->palette)); ptr += sizeof(ppu->palette);
-    memcpy(&ppu->nametable, ptr, sizeof(ppu->nametable)); ptr += sizeof(ppu->nametable);
+    d.pop(&ppu->palette, sizeof(ppu->palette)); 
+    d.pop(&ppu->nametable, sizeof(ppu->nametable));
  }
  
- memcpy(&ppu->currentAddress, ptr, sizeof(ppu->currentAddress)); ptr += sizeof(ppu->currentAddress);
- memcpy(&ppu->writeToggle, ptr, sizeof(ppu->writeToggle)); ptr += sizeof(ppu->writeToggle);
- memcpy(&ppu->vramBuffer, ptr, sizeof(ppu->vramBuffer)); ptr += sizeof(ppu->vramBuffer);
+ d.pop(&ppu->currentAddress, sizeof(ppu->currentAddress));
+ d.pop(&ppu->writeToggle, sizeof(ppu->writeToggle)); 
+ d.pop(&ppu->vramBuffer, sizeof(ppu->vramBuffer));
 }
 
 inline void audioCallback(uint8_t* stream, int length)

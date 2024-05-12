@@ -10,6 +10,9 @@
 
 #include "Constants.hpp"
 
+#include <jaffarCommon/serializers/base.hpp>
+#include <jaffarCommon/deserializers/base.hpp>
+
 uint8_t* romImage;
 SDL_Window* window;
 SDL_Renderer* renderer;
@@ -177,12 +180,12 @@ size_t getStateSize()
   return smbEngine->getStateSize();
 }
 
-void saveState(uint8_t* buffer)
+void saveState(jaffarCommon::serializer::Base& s)
 {
-  smbEngine->saveState(buffer);
+  smbEngine->saveState(s);
 }
 
-void loadState(const uint8_t* buffer)
+void loadState(jaffarCommon::deserializer::Base& d)
 {
- smbEngine->loadState(buffer);
+ smbEngine->loadState(d);
 }

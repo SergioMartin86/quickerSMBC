@@ -5,8 +5,9 @@
 #include <vector>
 #include <jaffarCommon/exceptions.hpp>
 #include <jaffarCommon/file.hpp>
+#include <jaffarCommon/serializers/base.hpp>
 #include <jaffarCommon/serializers/contiguous.hpp>
-#include <jaffarCommon/deserializers/contiguous.hpp>
+#include <jaffarCommon/deserializers/base.hpp>
 
 extern bool loadRomImage(uint8_t* buffer, size_t size);
 extern bool initializeVideo();
@@ -19,8 +20,8 @@ extern void renderFrame();
 extern void enableRendering();
 extern void disableRendering();
 extern size_t getStateSize();
-extern void saveState(uint8_t* buffer);
-extern void loadState(const uint8_t* buffer);
+extern void saveState(jaffarCommon::serializer::Base& s);
+extern void loadState(jaffarCommon::deserializer::Base& d);
 extern uint8_t* getRamPointer();
 extern void enableStateBlock(const std::string& block);
 extern void disableStateBlock(const std::string& block);
@@ -74,19 +75,19 @@ class EmuInstance : public EmuInstanceBase
 
   void serializeState(jaffarCommon::serializer::Base& s) const override
   {
-    ::saveState(s.getOutputDataBuffer());
-    s.pushContiguous(nullptr, _stateSize);
+    ::saveState(s);
   }
 
   void deserializeState(jaffarCommon::deserializer::Base& d) override
   {
-    ::loadState(d.getInputDataBuffer());
-    d.popContiguous(nullptr, _stateSize);
+    ::loadState(d);
   }
 
   size_t getStateSizeImpl() const override
   {
-    return ::getStateSize();
+    jaffarCommon::serializer::Contiguous s;
+    serializeState(s);
+    return s.getOutputSize();
   }
 
   void updateRenderer() override
