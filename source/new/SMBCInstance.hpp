@@ -25,6 +25,8 @@ extern void loadState(jaffarCommon::deserializer::Base& d);
 extern uint8_t* getRamPointer();
 extern void enableStateBlock(const std::string& block);
 extern void disableStateBlock(const std::string& block);
+extern uint8_t* getVideoBufferPointer();
+extern size_t getVideoBufferSize();
 
 namespace smbc
 {
@@ -117,6 +119,15 @@ class EmuInstance : public EmuInstanceBase
     ::reset();
   }
 
+  uint8_t* getVideoBufferPointer() const
+  {
+    return ::getVideoBufferPointer();
+  }
+
+  size_t getVideoBufferSize() const
+  {
+    return ::getVideoBufferSize();
+  }
 
   std::string getCoreName() const override { return "QuickerSMBC"; }
 

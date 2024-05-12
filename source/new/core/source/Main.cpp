@@ -20,7 +20,7 @@ SDL_Texture* texture;
 SDL_Texture* scanlineTexture;
 SMBEngine* smbEngine = nullptr;
 uint32_t renderBuffer[RENDER_WIDTH * RENDER_HEIGHT];
-bool _doRendering = true;
+bool _doRendering = false;
 
 void enableStateBlock(const std::string& block)
 {
@@ -48,6 +48,16 @@ void enableRendering()
 void disableRendering()
 {
     _doRendering = false;
+}
+
+uint8_t* getVideoBufferPointer()
+{
+  return (uint8_t*)renderBuffer;
+}
+
+size_t getVideoBufferSize() 
+{
+  return RENDER_WIDTH * RENDER_HEIGHT * sizeof(uint32_t);
 }
 
 /**
