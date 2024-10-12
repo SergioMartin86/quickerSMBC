@@ -30,9 +30,10 @@ class EmuInstance : public EmuInstanceBase
 {
  public:
 
- EmuInstance() : EmuInstanceBase()
+ EmuInstance(const nlohmann::json &config) : EmuInstanceBase(config)
  {
  }
+ 
 
  ~EmuInstance()
  {
@@ -119,10 +120,8 @@ class EmuInstance : public EmuInstanceBase
 
   virtual uint8_t* getRamPointer() const { return ::getRamPointer(); }
 
-  void advanceStateImpl(smbc::Controller controller) override
+  void advanceStateImpl(const jaffar::input_t &input) override
   {
-    const auto& input = controller.getInput();
-
     advanceFrame
     (
       input.buttonUp,

@@ -4,6 +4,7 @@
 #include <string>
 #include <jaffarCommon/hash.hpp>
 #include <jaffarCommon/exceptions.hpp>
+#include <inputParser.hpp>
 
 #define _INVERSE_FRAME_RATE 66667
 
@@ -22,6 +23,13 @@ class PlaybackInstance
   PlaybackInstance(smbc::EmuInstance *emu, const std::vector<std::string> &sequence, const std::string& cycleType) :
    _emu(emu)
   {
+    // Getting input parser from the emulator
+    const auto inputParser = emu->getInputParser();
+
+    // Getting decoded emulator input for each entry in the sequence
+    std::vector<jaffar::input_t> decodedSequence;
+    for (const auto &inputString : sequence) decodedSequence.push_back(inputParser->parseInputString(inputString));
+    
     // Getting full state size
     _fullStateSize = _emu->getStateSize();  
 
@@ -50,15 +58,15 @@ class PlaybackInstance
       // We advance depending on cycle type
       if (cycleType == "Simple")
       {
-        _emu->advanceState(step.input);
+        _emu->advanceState(decodedSequence[i]);
       }
 
       if (cycleType == "Rerecord")
       {
-        _emu->advanceState(step.input);
+        _emu->advanceState(decodedSequence[i]);
         jaffarCommon::deserializer::Contiguous d(stateData, _fullStateSize);
         _emu->deserializeState(d);
-        _emu->advanceState(step.input);
+        _emu->advanceState(decodedSequence[i]);
       }
     }
 
@@ -92,7 +100,7 @@ class PlaybackInstance
       _emu->deserializeState(d);
     }
 
-    _emu->advanceState("|..|........|");
+    _emu->advanceState(jaffar::input_t());
 
     {
       jaffarCommon::deserializer::Contiguous d(stateData, _fullStateSize);
