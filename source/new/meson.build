@@ -12,6 +12,7 @@ quickerSMBCSrc =  [
 
 quickerSMBCIncludeDirs = [
  '.',
+ '..',
  'core',
  'core/source',
 ]
