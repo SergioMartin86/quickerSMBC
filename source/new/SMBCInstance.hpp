@@ -3,30 +3,31 @@
 #include "../SMBCInstanceBase.hpp"
 #include <string>
 #include <vector>
+#include <memory>
 #include <jaffarCommon/exceptions.hpp>
 #include <jaffarCommon/file.hpp>
 #include <jaffarCommon/serializers/base.hpp>
 #include <jaffarCommon/serializers/contiguous.hpp>
 #include <jaffarCommon/deserializers/base.hpp>
+#include "core/source/SMB/SMBEngine.hpp"
 
 extern bool loadRomImage(uint8_t* buffer, size_t size);
 extern bool initializeVideo();
 extern void finalizeVideo();
-extern void reset();
 extern uint32_t* getRenderBuffer();
 extern size_t getRenderBufferSize();
-extern void advanceFrame(bool buttonUp, bool buttonDown, bool buttonLeft, bool buttonRight, bool buttonA, bool buttonB, bool buttonSelect, bool buttonStart);
+extern void advanceFrame(SMBEngine* smbEngine, bool buttonUp, bool buttonDown, bool buttonLeft, bool buttonRight, bool buttonA, bool buttonB, bool buttonSelect, bool buttonStart);
 extern void renderFrame();
 extern void enableRendering();
 extern void disableRendering();
 extern size_t getStateSize();
 extern void saveState(jaffarCommon::serializer::Base& s);
 extern void loadState(jaffarCommon::deserializer::Base& d);
-extern uint8_t* getRamPointer();
 extern void enableStateBlock(const std::string& block);
 extern void disableStateBlock(const std::string& block);
 extern uint8_t* getVideoBufferPointer();
 extern size_t getVideoBufferSize();
+extern thread_local uint8_t* romImage;
 
 namespace smbc
 {
@@ -51,7 +52,12 @@ class EmuInstance : public EmuInstanceBase
   {
     std::string romData;
     jaffarCommon::file::loadStringFromFile(romData, romFilePath);
-    loadRomImage((uint8_t*)romData.data(), romData.size());
+
+    // Read the entire file into a buffer
+    romImage = new uint8_t[romData.size()];
+    memcpy(romImage, (uint8_t*)romData.data(), romData.size());
+    smbEngine = std::make_unique<SMBEngine>(romImage);
+    smbEngine->reset();
     return true;
   }
 
@@ -77,12 +83,12 @@ class EmuInstance : public EmuInstanceBase
 
   void serializeState(jaffarCommon::serializer::Base& s) const override
   {
-    ::saveState(s);
+    smbEngine->saveState(s);
   }
 
   void deserializeState(jaffarCommon::deserializer::Base& d) override
   {
-    ::loadState(d);
+    smbEngine->loadState(d);
   }
 
   size_t getStateSizeImpl() const override
@@ -111,12 +117,12 @@ class EmuInstance : public EmuInstanceBase
 
   void doSoftReset() override
   {
-    ::reset();
+    smbEngine->reset();
   }
   
   void doHardReset() override
   {
-    ::reset();
+    smbEngine->reset();
   }
 
   uint8_t* getVideoBufferPointer() const
@@ -131,12 +137,13 @@ class EmuInstance : public EmuInstanceBase
 
   std::string getCoreName() const override { return "QuickerSMBC"; }
 
-  virtual uint8_t* getRamPointer() const { return ::getRamPointer(); }
+  virtual uint8_t* getRamPointer() const { return smbEngine->getRamPointer(); }
 
   void advanceStateImpl(const jaffar::input_t &input) override
   {
     advanceFrame
     (
+      smbEngine.get(),
       input.buttonUp,
       input.buttonDown,
       input.buttonLeft,
@@ -150,6 +157,7 @@ class EmuInstance : public EmuInstanceBase
 
   private:
 
+  std::unique_ptr<SMBEngine> smbEngine;
 };
 
 } // namespace smbc

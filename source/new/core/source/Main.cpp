@@ -18,7 +18,6 @@ thread_local SDL_Window* window;
 thread_local SDL_Renderer* renderer;
 thread_local SDL_Texture* texture;
 thread_local SDL_Texture* scanlineTexture;
-thread_local SMBEngine* smbEngine = nullptr;
 thread_local uint32_t renderBuffer[RENDER_WIDTH * RENDER_HEIGHT];
 thread_local bool _doRendering = false;
 
@@ -60,24 +59,6 @@ uint8_t* getVideoBufferPointer()
 size_t getVideoBufferSize() 
 {
   return RENDER_WIDTH * RENDER_HEIGHT * sizeof(uint32_t);
-}
-
-/**
- * Load the Super Mario Bros. ROM image.
- */
-bool loadRomImage(uint8_t* buffer, size_t size)
-{
-    // Read the entire file into a buffer
-    romImage = new uint8_t[size];
-    memcpy(romImage, buffer, size);
-    smbEngine = new SMBEngine(romImage);
-    smbEngine->reset();
-    return true;
-}
-
-uint8_t* getRamPointer()
-{
-  return smbEngine->getRamPointer();
 }
 
 /**
@@ -143,11 +124,6 @@ void finalizeVideo()
     SDL_Quit();
 }
 
-void reset()
-{
-  smbEngine->reset();
-}
-
 uint32_t* getRenderBuffer()
 {
   return renderBuffer;
@@ -158,7 +134,7 @@ size_t getRenderBufferSize()
   return 61440 * sizeof(uint32_t);
 }
 
-void advanceFrame(bool buttonUp, bool buttonDown, bool buttonLeft, bool buttonRight, bool buttonA, bool buttonB, bool buttonSelect, bool buttonStart)
+void advanceFrame(SMBEngine* smbEngine, bool buttonUp, bool buttonDown, bool buttonLeft, bool buttonRight, bool buttonA, bool buttonB, bool buttonSelect, bool buttonStart)
 {
     Controller& controller1 = smbEngine->getController1();
     controller1.setButtonState(BUTTON_A, buttonA);
@@ -171,7 +147,7 @@ void advanceFrame(bool buttonUp, bool buttonDown, bool buttonLeft, bool buttonRi
     controller1.setButtonState(BUTTON_RIGHT, buttonRight);
 
     smbEngine->update();
-    if (_doRendering) smbEngine->render(renderBuffer);
+    // if (_doRendering) smbEngine->render(renderBuffer);
 }
 
 void renderFrame()
@@ -185,19 +161,4 @@ void renderFrame()
     SDL_RenderCopy(renderer, texture, NULL, NULL);
 
     SDL_RenderPresent(renderer);
-}
-
-size_t getStateSize()
-{
-  return smbEngine->getStateSize();
-}
-
-void saveState(jaffarCommon::serializer::Base& s)
-{
-  smbEngine->saveState(s);
-}
-
-void loadState(jaffarCommon::deserializer::Base& d)
-{
- smbEngine->loadState(d);
 }
